@@ -1,0 +1,35 @@
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const { sequelize } = require('./db');
+
+if (!process.env.JWT_SECRET) {
+  console.error('ERROR: JWT_SECRET no definido en .env');
+  process.exit(1);
+}
+
+const app = express();
+
+app.use(cors({
+  origin: ['http://localhost:5173', 'http://localhost:80', 'http://localhost'],
+  credentials: true,
+}));
+
+app.use(express.json());
+
+app.use('/api/auth',     require('./routes/auth'));
+app.use('/api/stores',   require('./routes/stores'));
+app.use('/api/products', require('./routes/products'));
+app.use('/api/returns',  require('./routes/returns'));
+
+const PORT = process.env.PORT || 3002;
+
+sequelize.authenticate()
+  .then(() => {
+    console.log('DB conectada');
+    app.listen(PORT, () => console.log(`Backend en http://localhost:${PORT}`));
+  })
+  .catch(err => {
+    console.error('Error al conectar DB:', err.message);
+    process.exit(1);
+  });
