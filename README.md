@@ -4,7 +4,7 @@ Demo academica para INF-361 Innovacion Tecnologica.
 
 ---
 
-## Opcion 1: Docker (recomendado para compañeros)
+## Opcion 1: Docker 
 
 Solo necesitan tener Docker Desktop instalado.
 
@@ -30,14 +30,6 @@ Para reiniciar desde cero (borra datos):
 docker compose down -v
 docker compose up --build
 ```
-
-### Instalar Docker Desktop en Windows 11
-
-1. Descargar desde https://www.docker.com/products/docker-desktop/
-2. Instalar y reiniciar el equipo
-3. Abrir Docker Desktop y esperar a que el icono de la barra de tareas este verde
-
----
 
 ## Opcion 2: Setup local
 
