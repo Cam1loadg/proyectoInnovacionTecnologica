@@ -897,31 +897,6 @@ body {
   background: var(--surface);
 }
 
-.buyer-tab-toggle {
-  display: flex;
-  border-radius: 10px;
-  overflow: hidden;
-  border: 1.5px solid var(--border);
-  margin-bottom: 20px;
-}
-
-.buyer-tab-btn {
-  flex: 1;
-  padding: 11px 0;
-  font-size: 13px;
-  font-weight: 500;
-  font-family: var(--font-b);
-  cursor: pointer;
-  border: none;
-  background: transparent;
-  color: var(--text3);
-  transition: all 0.15s;
-}
-.buyer-tab-btn.active {
-  background: var(--brand);
-  color: #fff;
-  font-weight: 600;
-}
 
 .buyer-code-display {
   background: var(--brand);

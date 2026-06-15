@@ -3,46 +3,35 @@ import { useNavigate } from 'react-router-dom';
 import { api } from '../../context/AuthContext';
 
 export default function BuyerHome() {
-  const navigate = useNavigate();
-  const [tab, setTab]           = useState('new');
-  const [orderInput, setOrderInput] = useState('');
-  const [trackInput, setTrackInput] = useState('');
-  const [loading, setLoading]   = useState(false);
-  const [error, setError]       = useState('');
+  const navigate  = useNavigate();
+  const [input, setInput]     = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError]     = useState('');
 
-  async function handleOrderSearch(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    const num = orderInput.trim().toUpperCase();
-    if (!num) return;
+    const val = input.trim().toUpperCase();
+    if (!val) return;
     setLoading(true);
     setError('');
-    const res = await api(`/api/buyer/order/${encodeURIComponent(num)}`);
-    setLoading(false);
-    if (res.success) {
-      navigate(`/buyer/order/${encodeURIComponent(num)}`);
-    } else {
-      setError(res.error || 'Pedido no encontrado');
-    }
-  }
 
-  async function handleTrack(e) {
-    e.preventDefault();
-    const code = trackInput.trim().toUpperCase();
-    if (!code) return;
-    setLoading(true);
-    setError('');
-    const res = await api(`/api/buyer/returns/${encodeURIComponent(code)}`);
-    setLoading(false);
-    if (res.success) {
-      navigate(`/buyer/track/${encodeURIComponent(code)}`);
+    if (val.startsWith('ORD-')) {
+      const res = await api(`/api/buyer/order/${encodeURIComponent(val)}`);
+      setLoading(false);
+      if (res.success) {
+        navigate(`/buyer/order/${encodeURIComponent(val)}`);
+      } else {
+        setError(res.error || 'Pedido no encontrado');
+      }
     } else {
-      setError(res.error || 'Código no encontrado');
+      const res = await api(`/api/buyer/returns/${encodeURIComponent(val)}`);
+      setLoading(false);
+      if (res.success) {
+        navigate(`/buyer/track/${encodeURIComponent(val)}`);
+      } else {
+        setError('Código o número de pedido no encontrado');
+      }
     }
-  }
-
-  function switchTab(t) {
-    setTab(t);
-    setError('');
   }
 
   return (
@@ -54,58 +43,28 @@ export default function BuyerHome() {
           <div className="login-tagline">Portal del comprador</div>
         </div>
 
-        <div className="buyer-tab-toggle">
-          <button
-            className={`buyer-tab-btn${tab === 'new' ? ' active' : ''}`}
-            onClick={() => switchTab('new')}
-            type="button"
-          >
-            Nueva devolución
-          </button>
-          <button
-            className={`buyer-tab-btn${tab === 'track' ? ' active' : ''}`}
-            onClick={() => switchTab('track')}
-            type="button"
-          >
-            Rastrear
-          </button>
-        </div>
+        {error && <div className="err-box">{error}</div>}
 
-        {error && <div className="err-box" style={{ marginTop: '12px' }}>{error}</div>}
-
-        {tab === 'new' ? (
-          <form onSubmit={handleOrderSearch}>
-            <div className="form-group">
-              <label className="form-label">Número de pedido</label>
-              <input
-                className="form-input"
-                placeholder="RIQ-2024-001"
-                value={orderInput}
-                onChange={e => setOrderInput(e.target.value)}
-                autoFocus
-              />
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label className="form-label">Número de pedido o código de devolución</label>
+            <input
+              className={`form-input${error ? ' error' : ''}`}
+              placeholder="ORD-2025-00001 o RET-4729"
+              value={input}
+              onChange={e => { setInput(e.target.value); setError(''); }}
+              autoFocus
+              autoComplete="off"
+            />
+            <div style={{ fontSize: '11px', color: 'var(--text3)', marginTop: '5px', lineHeight: '1.5' }}>
+              Ingresa tu número de pedido para iniciar una devolución,
+              o tu código <strong>RET-</strong> para rastrear una existente.
             </div>
-            <button className="btn btn-primary" disabled={loading || !orderInput.trim()}>
-              {loading ? 'Buscando...' : 'Buscar pedido'}
-            </button>
-          </form>
-        ) : (
-          <form onSubmit={handleTrack}>
-            <div className="form-group">
-              <label className="form-label">Código de devolución</label>
-              <input
-                className="form-input"
-                placeholder="RIQ-XXXXXX"
-                value={trackInput}
-                onChange={e => setTrackInput(e.target.value)}
-                autoFocus
-              />
-            </div>
-            <button className="btn btn-primary" disabled={loading || !trackInput.trim()}>
-              {loading ? 'Buscando...' : 'Ver estado'}
-            </button>
-          </form>
-        )}
+          </div>
+          <button className="btn btn-primary" disabled={loading || !input.trim()}>
+            {loading ? 'Buscando...' : 'Continuar'}
+          </button>
+        </form>
 
         <div className="login-demo-box" style={{ marginTop: '20px' }}>
           <strong>Demo &mdash; pedidos sin devolución:</strong><br />
