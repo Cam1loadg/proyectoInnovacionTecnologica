@@ -108,8 +108,9 @@ export default function BuyerHome() {
         )}
 
         <div className="login-demo-box" style={{ marginTop: '20px' }}>
-          <strong>Demo &mdash; pedidos disponibles:</strong><br />
-          RIQ-2024-001 &middot; RIQ-2024-002 &middot; RIQ-2024-003
+          <strong>Demo &mdash; pedidos sin devolución:</strong><br />
+          ORD-2025-00001 &middot; ORD-2025-00002<br />
+          <span style={{ fontSize: '11px' }}>Rastrear existente: RET-4729 &middot; RET-4732</span>
         </div>
 
       </div>

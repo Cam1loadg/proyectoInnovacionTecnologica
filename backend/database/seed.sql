@@ -285,3 +285,22 @@ FROM returns r WHERE r.return_code IN ('RET-4735','RET-4736','RET-4737','RET-473
 INSERT INTO return_events (return_id, description, created_at)
 SELECT r.id, 'Devolucion rechazada', r.created_at + INTERVAL '24 hours'
 FROM returns r WHERE r.return_code = 'RET-4739';
+
+-- Pedidos frescos sin devolución para demostrar el flujo del portal comprador
+INSERT INTO orders (store_id, buyer_name, order_number)
+SELECT id, 'Ignacio Reyes', 'ORD-2025-00001' FROM stores WHERE slug = 'nike-store-cl' UNION ALL
+SELECT id, 'Paula Vega',    'ORD-2025-00002' FROM stores WHERE slug = 'nike-store-cl';
+
+INSERT INTO order_items (order_id, product_variant_id, quantity)
+SELECT o.id, pv.id, 1
+FROM orders o
+JOIN product_variants pv ON true
+JOIN products p ON pv.product_id = p.id
+WHERE o.order_number = 'ORD-2025-00001' AND p.sku = 'NK-DRFT-002' AND pv.size = 'L';
+
+INSERT INTO order_items (order_id, product_variant_id, quantity)
+SELECT o.id, pv.id, 1
+FROM orders o
+JOIN product_variants pv ON true
+JOIN products p ON pv.product_id = p.id
+WHERE o.order_number = 'ORD-2025-00002' AND p.sku = 'NK-AM270-001' AND pv.size = '43';
