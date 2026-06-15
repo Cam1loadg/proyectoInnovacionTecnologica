@@ -8,6 +8,11 @@ import ReturnDetail from './pages/seller/ReturnDetail';
 import Alerts from './pages/seller/Alerts';
 import Catalog from './pages/seller/Catalog';
 import ProductDetail from './pages/seller/ProductDetail';
+import BuyerHome from './pages/buyer/BuyerHome';
+import OrderView from './pages/buyer/OrderView';
+import ReturnForm from './pages/buyer/ReturnForm';
+import ReturnSuccess from './pages/buyer/ReturnSuccess';
+import TrackReturn from './pages/buyer/TrackReturn';
 
 function PrivateRoute({ children }) {
   const { token } = useAuth();
@@ -47,6 +52,12 @@ export default function App() {
           <Route path="/seller/catalog/:id" element={
             <StoreRoute><ProductDetail /></StoreRoute>
           } />
+
+          <Route path="/buyer"                  element={<BuyerHome />} />
+          <Route path="/buyer/order/:orderNumber" element={<OrderView />} />
+          <Route path="/buyer/return/new"       element={<ReturnForm />} />
+          <Route path="/buyer/confirm"          element={<ReturnSuccess />} />
+          <Route path="/buyer/track/:returnCode" element={<TrackReturn />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

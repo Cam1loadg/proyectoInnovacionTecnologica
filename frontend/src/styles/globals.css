@@ -872,3 +872,85 @@ body {
 
   .content-inner { max-width: 1060px; }
 }
+
+/* ─── BUYER PORTAL ────────────────────────────────────────── */
+
+.buyer-layout {
+  min-height: 100vh;
+  background: var(--surface2);
+  display: flex;
+  flex-direction: column;
+}
+
+.buyer-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 24px;
+  background: var(--surface2);
+}
+
+.buyer-item-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--surface);
+}
+
+.buyer-tab-toggle {
+  display: flex;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1.5px solid var(--border);
+  margin-bottom: 20px;
+}
+
+.buyer-tab-btn {
+  flex: 1;
+  padding: 11px 0;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font-b);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--text3);
+  transition: all 0.15s;
+}
+.buyer-tab-btn.active {
+  background: var(--brand);
+  color: #fff;
+  font-weight: 600;
+}
+
+.buyer-code-display {
+  background: var(--brand);
+  color: var(--accent);
+  font-family: var(--font-h);
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-align: center;
+  padding: 20px 24px;
+  border-radius: 12px;
+  margin: 16px 0;
+  word-break: break-all;
+}
+
+.buyer-status-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+}
+.buyer-status-banner.status-pending   { background: #FEF3C7; border: 1px solid #FDE68A; }
+.buyer-status-banner.status-reviewing { background: var(--surface3); border: 1px solid var(--border); }
+.buyer-status-banner.status-approved  { background: var(--accent-soft); border: 1px solid rgba(0,212,170,0.3); }
+.buyer-status-banner.status-rejected  { background: #FEF2F2; border: 1px solid #FECACA; }
+
+@media (min-width: 768px) {
+  .buyer-item-row    { padding: 14px 28px; gap: 16px; }
+  .buyer-code-display { font-size: 30px; }
+}
