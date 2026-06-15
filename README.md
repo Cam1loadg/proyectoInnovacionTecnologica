@@ -2,7 +2,7 @@
 
 ---
 
-## Opcion 1: Docker 
+## Docker 
 
 Solo necesitan tener Docker Desktop instalado.
 
@@ -44,9 +44,4 @@ docker compose up --build
 | Password | demo1234                |
 | Comprador| ORD-2025-00001          |
 | Comprador| ORD-2025-00002          |
----
 
-    │   ├── styles/globals.css
-    │   └── App.jsx
-    └── package.json
-```
