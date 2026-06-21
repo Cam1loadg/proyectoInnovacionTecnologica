@@ -58,6 +58,8 @@ export default function App() {
           <Route path="/buyer/return/new"       element={<ReturnForm />} />
           <Route path="/buyer/confirm"          element={<ReturnSuccess />} />
           <Route path="/buyer/track/:returnCode" element={<TrackReturn />} />
+
+          <Route path="*" element={<Navigate to="/seller/login" replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

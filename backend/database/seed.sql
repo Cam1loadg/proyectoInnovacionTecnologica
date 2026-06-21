@@ -304,3 +304,53 @@ FROM orders o
 JOIN product_variants pv ON true
 JOIN products p ON pv.product_id = p.id
 WHERE o.order_number = 'ORD-2025-00002' AND p.sku = 'NK-AM270-001' AND pv.size = '43';
+
+-- Ordenes adicionales para enriquecer la alerta del Air Max 270 (11 devoluciones en 30 dias)
+INSERT INTO orders (store_id, buyer_name, order_number)
+SELECT id, 'Elena Vargas',     'ORD-2025-00003' FROM stores WHERE slug = 'nike-store-cl' UNION ALL
+SELECT id, 'Roberto Castro',   'ORD-2025-00004' FROM stores WHERE slug = 'nike-store-cl' UNION ALL
+SELECT id, 'Francisca Mora',   'ORD-2025-00005' FROM stores WHERE slug = 'nike-store-cl';
+
+INSERT INTO order_items (order_id, product_variant_id, quantity)
+SELECT o.id, pv.id, 1 FROM orders o
+JOIN product_variants pv ON true JOIN products p ON pv.product_id = p.id
+WHERE o.order_number = 'ORD-2025-00003' AND p.sku = 'NK-AM270-001' AND pv.size = '40';
+
+INSERT INTO order_items (order_id, product_variant_id, quantity)
+SELECT o.id, pv.id, 1 FROM orders o
+JOIN product_variants pv ON true JOIN products p ON pv.product_id = p.id
+WHERE o.order_number = 'ORD-2025-00004' AND p.sku = 'NK-AM270-001' AND pv.size = '41';
+
+INSERT INTO order_items (order_id, product_variant_id, quantity)
+SELECT o.id, pv.id, 1 FROM orders o
+JOIN product_variants pv ON true JOIN products p ON pv.product_id = p.id
+WHERE o.order_number = 'ORD-2025-00005' AND p.sku = 'NK-AM270-001' AND pv.size = '42';
+
+INSERT INTO returns (order_item_id, buyer_name, store_id, reason, comment, status, return_code, created_at)
+SELECT oi.id, 'Elena Vargas', s.id, 'wrong_size',
+  'Pedi talla 40 y queda muy chica, necesito cambio a 41.',
+  'pending', 'RET-4740', NOW() - INTERVAL '1 day'
+FROM order_items oi JOIN orders o ON o.id = oi.order_id JOIN stores s ON s.id = o.store_id
+WHERE o.order_number = 'ORD-2025-00003';
+
+INSERT INTO returns (order_item_id, buyer_name, store_id, reason, comment, status, return_code, created_at)
+SELECT oi.id, 'Roberto Castro', s.id, 'defective',
+  'La suela del lado derecho tiene un desprendimiento desde la caja.',
+  'pending', 'RET-4741', NOW() - INTERVAL '3 days'
+FROM order_items oi JOIN orders o ON o.id = oi.order_id JOIN stores s ON s.id = o.store_id
+WHERE o.order_number = 'ORD-2025-00004';
+
+INSERT INTO returns (order_item_id, buyer_name, store_id, reason, comment, status, return_code, created_at)
+SELECT oi.id, 'Francisca Mora', s.id, 'not_as_described',
+  'El color negro de la foto se ve muy diferente al que recibi, es mas grisaceo.',
+  'reviewing', 'RET-4742', NOW() - INTERVAL '5 days'
+FROM order_items oi JOIN orders o ON o.id = oi.order_id JOIN stores s ON s.id = o.store_id
+WHERE o.order_number = 'ORD-2025-00005';
+
+INSERT INTO return_events (return_id, description, created_at)
+SELECT r.id, 'Solicitud recibida', r.created_at
+FROM returns r WHERE r.return_code IN ('RET-4740', 'RET-4741', 'RET-4742');
+
+INSERT INTO return_events (return_id, description, created_at)
+SELECT r.id, 'Revision iniciada', r.created_at + INTERVAL '4 hours'
+FROM returns r WHERE r.return_code = 'RET-4742';
